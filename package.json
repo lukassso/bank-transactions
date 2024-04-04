@@ -11,9 +11,9 @@
     "server": "json-server api/db.json"
   },
   "dependencies": {
+    "json-server": "^0.17.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "json-server": "^0.17.0"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@radix-ui/react-slot": "^1.0.2",
