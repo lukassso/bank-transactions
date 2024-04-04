@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 
-export const SearchComponent = () => (
+export const NewTransactionComponent = () => (
   <Card className="order-first lg:order-last">
     <CardHeader>
       <CardTitle>New Transaction Form</CardTitle>

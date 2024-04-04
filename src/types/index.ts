@@ -14,6 +14,8 @@ export type TransactionsState = {
   currentPage: number;
   itemsPerPage: number;
   setPage: (page: number) => void;
+  handleSearch: (query: string) => void;
+  query: string;
 };
 
 export interface Action {

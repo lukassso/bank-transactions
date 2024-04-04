@@ -1,6 +1,6 @@
 import { Reducer } from 'react';
 import { TransactionsState, type Action } from '../types';
-import { SET_LOADING, SET_TRANSACTIONS, SET_PAGE } from './actions';
+import { SET_LOADING, SET_TRANSACTIONS, SET_PAGE, SET_FILTERED_TRANSACTIONS } from './actions';
 
 const reducer: Reducer<TransactionsState, Action> = (state, action) => {
   switch (action.type) {
@@ -19,6 +19,12 @@ const reducer: Reducer<TransactionsState, Action> = (state, action) => {
       return {
         ...state,
         currentPage: action.payload.page,
+      };
+    case SET_FILTERED_TRANSACTIONS:
+      return {
+        ...state,
+        query: action.payload.query,
+        currentPage: 1,
       };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

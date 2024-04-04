@@ -2,7 +2,7 @@ import { Footer } from './layout/Footer';
 import { Navbar } from './layout/Navbar';
 import { TableComponent } from './layout/TableComponent';
 import { BalanceComponent } from './layout/BalanceComponent';
-import { SearchComponent } from './layout/SearchComponent';
+import { NewTransactionComponent } from './layout/NewTransactionComponent';
 
 const App = () => (
   <>
@@ -12,7 +12,7 @@ const App = () => (
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 ">
           <BalanceComponent />
         </div>
-        <SearchComponent />
+        <NewTransactionComponent />
       </div>
       <TableComponent />
     </main>

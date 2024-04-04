@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { DollarSign, CreditCard, Users, Activity, Search } from 'lucide-react';
+import { SearchComponent } from '../components/SearchComponent';
+import { DollarSign, CreditCard, Users, Activity } from 'lucide-react';
 
 export const BalanceComponent = () => (
   <>
@@ -50,12 +50,7 @@ export const BalanceComponent = () => (
       </CardHeader>
       <CardContent>
         <div className="relative">
-          <Search className="text-muted-foreground absolute left-2.5 top-2.5 h-5 w-5" />
-          <Input
-            type="search"
-            placeholder="Search beneficiary"
-            className="bg-background w-full rounded-lg pl-8 lg:w-[320px]"
-          />
+          <SearchComponent />
         </div>
       </CardContent>
     </Card>

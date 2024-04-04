@@ -4,20 +4,26 @@ import { useGlobalContext } from '../context';
 import { Pagination, PaginationContent, PaginationItem } from '../components/ui/pagination';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { useMemo } from 'react';
 
 export const TableComponent = () => {
-  const { transactions, isLoading, currentPage, itemsPerPage, setPage } = useGlobalContext();
+  const { transactions, isLoading, currentPage, itemsPerPage, setPage, query } = useGlobalContext();
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTransactions = transactions.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentTransactions = transactions.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageChange = (page: number) => {
     setPage(page);
   };
 
+  const transactionsFiltered = useMemo(() => {
+    return transactions.filter((transaction) => transaction.beneficiary.toLowerCase().includes(query));
+  }, [transactions]);
+  console.log('transactionsFiltered:', transactionsFiltered);
+
   if (isLoading) {
-    return <div>Loading...</div>; // Wyświetlamy ładowanie, jeśli dane są jeszcze pobierane
+    return <div>Loading...</div>; // Add a loading state
   }
 
   return (
@@ -38,7 +44,7 @@ export const TableComponent = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentTransactions.map((transaction) => (
+            {transactionsFiltered.map((transaction) => (
               <TableRow key={transaction.id}>
                 <TableCell className="font-medium">{transaction.beneficiary}</TableCell>
                 <TableCell>{new Date(transaction.date).toLocaleString()}</TableCell>

@@ -1,6 +1,6 @@
 import { FC, createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
 import reducer from './reducer';
-import { SET_LOADING, SET_TRANSACTIONS, SET_PAGE } from './actions';
+import { SET_LOADING, SET_TRANSACTIONS, SET_PAGE, SET_FILTERED_TRANSACTIONS } from './actions';
 import { TransactionsState } from '../types';
 
 const API_ENDPOINT = '../../api/db.json';
@@ -10,9 +10,13 @@ const initalState: TransactionsState = {
   isLoading: false,
   currentPage: 1,
   itemsPerPage: 20,
-  setPage: (page: number) => {
+  setPage: (page) => {
     page;
   },
+  handleSearch: (query: string) => {
+    query;
+  },
+  query: '',
 };
 
 const AppContext = createContext<TransactionsState>(initalState);
@@ -40,15 +44,19 @@ const AppProvider: FC<AppProviderProps> = ({ children }) => {
     }
   };
 
-  const setPage = (page: number) => {
+  const setPage = (page: number): void => {
     dispatch({ type: SET_PAGE, payload: { page } });
+  };
+
+  const handleSearch = (query: string): void => {
+    dispatch({ type: SET_FILTERED_TRANSACTIONS, payload: { query } });
   };
 
   useEffect(() => {
     fetchApiData();
-  }, []);
+  }, [state.query, state.currentPage]);
 
-  return <AppContext.Provider value={{ ...state, setPage }}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{ ...state, setPage, handleSearch }}>{children}</AppContext.Provider>;
 };
 
 const useGlobalContext = () => {
