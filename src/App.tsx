@@ -5,7 +5,7 @@ import { BalanceComponent } from './layout/BalanceComponent';
 import { SearchComponent } from './layout/SearchComponent';
 
 const App = () => (
-  <div>
+  <>
     <Navbar />
     <main className="grid gap-4 p-4 md:gap-8 md:p-8">
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 ">
@@ -17,6 +17,6 @@ const App = () => (
       <TableComponent />
     </main>
     <Footer />
-  </div>
+  </>
 );
 export default App;

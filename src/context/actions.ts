@@ -1,0 +1,2 @@
+export const SET_TRANSACTIONS = 'SET_TRANSACTIONS';
+export const SET_LOADING = 'SET_LOADING';
