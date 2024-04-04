@@ -1,7 +1,5 @@
-
 import { Button } from '../components/ui/button';
 import { Menu } from 'lucide-react';
-
 
 export const Navbar = () => (
   <header className="bg-background sticky top-0 flex h-16 items-center gap-4 border-b px-4 md:px-6">
