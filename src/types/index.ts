@@ -11,6 +11,9 @@ export interface Transaction {
 export type TransactionsState = {
   transactions: Transaction[];
   isLoading: boolean;
+  currentPage: number;
+  itemsPerPage: number;
+  setPage: (page: number) => void;
 };
 
 export interface Action {
