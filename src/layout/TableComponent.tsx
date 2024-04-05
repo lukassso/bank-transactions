@@ -73,7 +73,7 @@ export const TableComponent = () => {
                 <TableCell>{transaction.amount}</TableCell>
                 <TableCell className="hidden md:table-cell">{transaction.address}</TableCell>
                 <TableCell className="hidden md:table-cell">{transaction.description}</TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell className="md:table-cell">
                   <Trash2
                     className="h-4 w-4 cursor-pointer transition-colors hover:text-red-500"
                     onClick={() => handleDelete(transaction.id)}
