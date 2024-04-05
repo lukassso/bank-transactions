@@ -1,40 +1,39 @@
-import { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { useGlobalContext } from '../context';
+import { type Transaction } from '../types';
+
+const schema = yup.object().shape({
+  beneficiary: yup.string().required('Beneficiary is required'),
+  amount: yup.number().positive('Amount must be positive').required('Amount is required'),
+  account: yup
+    .string()
+    .required('Account number is required')
+    .matches(/^\d+$/, 'Account number must contain only digits'),
+  address: yup.string().required('Address is required'),
+  description: yup.string(),
+  date: yup.date().required('Date is required'),
+});
+
+type FormInputs = Omit<Transaction, 'id' | 'date'> & { date: string };
 
 export const NewTransactionComponent = () => {
   const { addTransaction } = useGlobalContext();
-  const [newTransaction, setNewTransaction] = useState({
-    id: 10000,
-    beneficiary: 'dsd',
-    account: 'ds',
-    date: '2021-12-15T01:05:42',
-    amount: 0,
-    address: 'dfg',
-    description: 'dfsd',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInputs>({
+    resolver: yupResolver(schema),
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewTransaction((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleAddTransaction = () => {
+  const onSubmit: SubmitHandler<FormInputs> = (data) => {
+    const newTransaction = { ...data, id: Math.floor(Math.random() * 100000) };
     addTransaction?.(newTransaction);
-    setNewTransaction({
-      id: 120,
-      beneficiary: '',
-      account: '',
-      date: '',
-      amount: 0,
-      address: '',
-      description: '',
-    });
   };
 
   return (
@@ -43,36 +42,21 @@ export const NewTransactionComponent = () => {
         <CardTitle>Add new Transaction</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-8">
-        <Input
-          type="text"
-          name="beneficiary"
-          placeholder="Beneficiary"
-          value={newTransaction.beneficiary}
-          onChange={handleInputChange}
-        />
-        <Input type="text" name="date" placeholder="Date" value={newTransaction.date} onChange={handleInputChange} />
-        <Input
-          type="number"
-          name="amount"
-          placeholder="Amount"
-          value={newTransaction.amount}
-          onChange={handleInputChange}
-        />
-        <Input
-          type="text"
-          name="address"
-          placeholder="Address"
-          value={newTransaction.address}
-          onChange={handleInputChange}
-        />
-        <Input
-          type="text"
-          name="description"
-          placeholder="Description"
-          value={newTransaction.description}
-          onChange={handleInputChange}
-        />
-        <Button onClick={handleAddTransaction}>Add Transaction</Button>
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3">
+          <Input type="text" inputName="beneficiary" placeholder="Beneficiary" {...register('beneficiary')} />
+          {errors.beneficiary && <p className="text-sm text-red-500">{errors.beneficiary.message}</p>}
+          <Input type="date" inputName="date" placeholder="Date" {...register('date')} />
+          {errors.date && <p className="text-sm text-red-500">{errors.date.message}</p>}
+          <Input type="number" inputName="amount" placeholder="Amount" {...register('amount')} />
+          {errors.amount && <p className="text-sm text-red-500">{errors.amount.message}</p>}
+          <Input type="text" inputName="account" placeholder="Account Number" {...register('account')} />
+          {errors.account && <p className="text-sm text-red-500">{errors.account.message}</p>}
+          <Input type="text" inputName="address" placeholder="Address" {...register('address')} />
+          {errors.address && <p className="text-sm text-red-500">{errors.address.message}</p>}
+          <Input type="text" inputName="description" placeholder="Description" {...register('description')} />
+          {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
+          <Button type="submit">Add Transaction</Button>
+        </form>
       </CardContent>
     </Card>
   );
