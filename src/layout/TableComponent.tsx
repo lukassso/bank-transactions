@@ -12,7 +12,11 @@ export const TableComponent = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-// const currentTransactions = transactions.slice(indexOfFirstItem, indexOfLastItem);
+
+  const currentTransactions = useMemo(() => {
+    return transactions.filter((transaction) => transaction.beneficiary.toLowerCase().includes(query))
+      .slice(indexOfFirstItem, indexOfLastItem);
+  }, [transactions, query, currentPage, itemsPerPage]);
 
   const handlePageChange = (page: number) => {
     setPage(page);
@@ -26,6 +30,7 @@ export const TableComponent = () => {
     }, 1000);
   };
 
+  //Todo: remove after testing
   const transactionsFiltered = useMemo(() => {
     return transactions.filter((transaction) => transaction.beneficiary.toLowerCase().includes(query));
   }, [transactions]);
@@ -53,7 +58,7 @@ export const TableComponent = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactionsFiltered.map((transaction) => (
+            {currentTransactions.map((transaction) => (
               <TableRow
                 key={transaction.id}
                 className={
