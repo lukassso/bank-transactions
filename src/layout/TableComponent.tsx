@@ -14,18 +14,19 @@ export const TableComponent = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   const currentTransactions = useMemo(() => {
-    return transactions.filter((transaction) => transaction.beneficiary.toLowerCase().includes(query))
+    return transactions
+      .filter((transaction) => transaction.beneficiary.toLowerCase().includes(query))
       .slice(indexOfFirstItem, indexOfLastItem);
   }, [transactions, query, currentPage, itemsPerPage]);
 
   const handlePageChange = (page: number) => {
-    setPage(page);
+    setPage?.(page);
   };
 
   const handleDelete = (id: number) => {
     setDeletedIds([...deletedIds, id]);
     setTimeout(() => {
-      deleteTransaction(id);
+      deleteTransaction?.(id);
       setDeletedIds([]);
     }, 1000);
   };

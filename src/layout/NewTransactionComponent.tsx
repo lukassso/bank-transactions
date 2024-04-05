@@ -16,7 +16,7 @@ export const NewTransactionComponent = () => {
     description: 'dfsd',
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewTransaction((prevState) => ({
       ...prevState,
@@ -25,7 +25,7 @@ export const NewTransactionComponent = () => {
   };
 
   const handleAddTransaction = () => {
-    addTransaction(newTransaction);
+    addTransaction?.(newTransaction);
     setNewTransaction({
       id: 120,
       beneficiary: '',

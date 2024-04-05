@@ -30,7 +30,7 @@ const reducer: Reducer<TransactionsState, Action> = (state, action) => {
     case SET_FILTERED_TRANSACTIONS:
       return {
         ...state,
-        query: action.payload.query, 
+        query: action.payload.query,
         currentPage: 1,
       };
     case DELETE_TRANSACTION:

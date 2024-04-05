@@ -1,38 +1,35 @@
 import { FC, createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
 import reducer from './reducer';
 import { SET_LOADING, SET_TRANSACTIONS, SET_PAGE, SET_FILTERED_TRANSACTIONS } from './actions';
-import { TransactionsState, Transaction } from '../types';
+import { TransactionsState, Transaction, AppContextValue } from '../types';
 
 const API_ENDPOINT = '../../api/db.json';
 
-const initalState: TransactionsState = {
-  transactions: [],
-    isLoading: false,
-  currentPage: 1,
-  itemsPerPage: 10,
-  setPage: (page) => {
-    page;
-  },
-  handleSearch: (query: string) => {
-    query;
-  },
-  query: '',
-  deleteTransaction: (id: number) => {
-    id;
-  },
-  addTransaction: (transaction: Transaction) => {
-    transaction;
-  },
+const saveStateToLocalStorage = (state: TransactionsState) => {
+  localStorage.setItem('transactionsState', JSON.stringify(state));
 };
 
-const AppContext = createContext<TransactionsState>(initalState);
+const loadStateFromLocalStorage = (): TransactionsState | null => {
+  const savedState = localStorage.getItem('transactionsState');
+  return savedState ? JSON.parse(savedState) : null;
+};
+
+const initalState: TransactionsState = {
+  transactions: [],
+  isLoading: false,
+  currentPage: 1,
+  itemsPerPage: 10,
+  query: '',
+};
+
+const AppContext = createContext<AppContextValue>(initalState);
 
 interface AppProviderProps {
   children: ReactNode;
 }
 
 const AppProvider: FC<AppProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initalState);
+  const [state, dispatch] = useReducer(reducer, loadStateFromLocalStorage() || initalState);
 
   const fetchApiData = async () => {
     dispatch({ type: SET_LOADING });
@@ -45,7 +42,7 @@ const AppProvider: FC<AppProviderProps> = ({ children }) => {
           transactions: data.transactions,
         },
       });
-          } catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
@@ -64,15 +61,25 @@ const AppProvider: FC<AppProviderProps> = ({ children }) => {
 
   const addTransaction = (transaction: Transaction): void => {
     dispatch({ type: 'ADD_TRANSACTION', payload: { transaction } });
-  }
+  };
+
+  useEffect(() => {
+    saveStateToLocalStorage(state);
+  }, [state]);
 
   useEffect(() => {
     fetchApiData();
-  }, [state.query, state.currentPage]);
+  }, []);
 
-  return (
-    <AppContext.Provider value={{ ...state, setPage, handleSearch, deleteTransaction, addTransaction }}>{children}</AppContext.Provider>
-  );
+  const contextValue = {
+    ...state,
+    setPage,
+    handleSearch,
+    deleteTransaction,
+    addTransaction,
+  };
+
+  return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };
 
 const useGlobalContext = () => {

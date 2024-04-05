@@ -8,16 +8,19 @@ export interface Transaction {
   description: string;
 }
 
-export type TransactionsState = {
+export interface TransactionsState {
   transactions: Transaction[];
-    isLoading: boolean;
+  isLoading: boolean;
   currentPage: number;
   itemsPerPage: number;
-  setPage: (page: number) => void;
-  handleSearch: (query: string) => void;
   query: string;
-  deleteTransaction: (id: number) => void;
-  addTransaction: (transaction: Transaction) => void;
+}
+
+export interface AppContextValue extends TransactionsState {
+  setPage?: (page: number) => void;
+  handleSearch?: (query: string) => void;
+  deleteTransaction?: (id: number) => void;
+  addTransaction?: (transaction: Transaction) => void;
 }
 
 export interface Action {

@@ -11,9 +11,9 @@ export const SearchComponent = () => {
       <Input
         type="search"
         placeholder="Search beneficiary"
-        className="bg-background w-full rounded-lg pl-8 lg:w-[320px]"
+        className="bg-background w-full rounded-lg pl-8"
         value={query}
-        onChange={(e) => handleSearch(e.target.value)}
+        onChange={(e) => handleSearch?.(e.target.value)}
       />
     </>
   );
