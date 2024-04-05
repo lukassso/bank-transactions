@@ -2,12 +2,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { useGlobalContext } from '../context';
 import { Pagination, PaginationContent, PaginationItem } from '../components/ui/pagination';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useMemo } from 'react';
 
 export const TableComponent = () => {
-  const { transactions, isLoading, currentPage, itemsPerPage, setPage, query } = useGlobalContext();
+  const { transactions, isLoading, currentPage, itemsPerPage, setPage, query, deleteTransaction } = useGlobalContext();
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -15,6 +15,10 @@ export const TableComponent = () => {
 
   const handlePageChange = (page: number) => {
     setPage(page);
+  };
+
+  const handleDelete = (id: number) => {
+    deleteTransaction(id);
   };
 
   const transactionsFiltered = useMemo(() => {
@@ -51,6 +55,12 @@ export const TableComponent = () => {
                 <TableCell>{transaction.amount}</TableCell>
                 <TableCell className="hidden md:table-cell">{transaction.address}</TableCell>
                 <TableCell className="hidden md:table-cell">{transaction.description}</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  <Trash2
+                    className="h-4 w-4 cursor-pointer transition-colors hover:text-red-500"
+                    onClick={() => handleDelete(transaction.id)}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

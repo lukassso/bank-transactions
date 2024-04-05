@@ -17,6 +17,9 @@ const initalState: TransactionsState = {
     query;
   },
   query: '',
+  deleteTransaction: (id: number) => {
+    id;
+  },
 };
 
 const AppContext = createContext<TransactionsState>(initalState);
@@ -52,11 +55,17 @@ const AppProvider: FC<AppProviderProps> = ({ children }) => {
     dispatch({ type: SET_FILTERED_TRANSACTIONS, payload: { query } });
   };
 
+  const deleteTransaction = (id: number): void => {
+    dispatch({ type: 'DELETE_TRANSACTION', payload: { id } });
+  };
+
   useEffect(() => {
     fetchApiData();
   }, [state.query, state.currentPage]);
 
-  return <AppContext.Provider value={{ ...state, setPage, handleSearch }}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={{ ...state, setPage, handleSearch, deleteTransaction }}>{children}</AppContext.Provider>
+  );
 };
 
 const useGlobalContext = () => {

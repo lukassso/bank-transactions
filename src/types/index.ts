@@ -16,6 +16,7 @@ export type TransactionsState = {
   setPage: (page: number) => void;
   handleSearch: (query: string) => void;
   query: string;
+  deleteTransaction: (id: number) => void;
 };
 
 export interface Action {
