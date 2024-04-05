@@ -12,7 +12,7 @@ export const TableComponent = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentTransactions = transactions.slice(indexOfFirstItem, indexOfLastItem);
+// const currentTransactions = transactions.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageChange = (page: number) => {
     setPage(page);

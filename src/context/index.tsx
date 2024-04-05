@@ -1,15 +1,15 @@
 import { FC, createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
 import reducer from './reducer';
 import { SET_LOADING, SET_TRANSACTIONS, SET_PAGE, SET_FILTERED_TRANSACTIONS } from './actions';
-import { TransactionsState } from '../types';
+import { TransactionsState, Transaction } from '../types';
 
 const API_ENDPOINT = '../../api/db.json';
 
 const initalState: TransactionsState = {
   transactions: [],
-  isLoading: false,
+    isLoading: false,
   currentPage: 1,
-  itemsPerPage: 20,
+  itemsPerPage: 10,
   setPage: (page) => {
     page;
   },
@@ -19,6 +19,9 @@ const initalState: TransactionsState = {
   query: '',
   deleteTransaction: (id: number) => {
     id;
+  },
+  addTransaction: (transaction: Transaction) => {
+    transaction;
   },
 };
 
@@ -42,7 +45,7 @@ const AppProvider: FC<AppProviderProps> = ({ children }) => {
           transactions: data.transactions,
         },
       });
-    } catch (error) {
+          } catch (error) {
       console.log(error);
     }
   };
@@ -59,12 +62,16 @@ const AppProvider: FC<AppProviderProps> = ({ children }) => {
     dispatch({ type: 'DELETE_TRANSACTION', payload: { id } });
   };
 
+  const addTransaction = (transaction: Transaction): void => {
+    dispatch({ type: 'ADD_TRANSACTION', payload: { transaction } });
+  }
+
   useEffect(() => {
     fetchApiData();
   }, [state.query, state.currentPage]);
 
   return (
-    <AppContext.Provider value={{ ...state, setPage, handleSearch, deleteTransaction }}>{children}</AppContext.Provider>
+    <AppContext.Provider value={{ ...state, setPage, handleSearch, deleteTransaction, addTransaction }}>{children}</AppContext.Provider>
   );
 };
 

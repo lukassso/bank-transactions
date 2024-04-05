@@ -10,14 +10,15 @@ export interface Transaction {
 
 export type TransactionsState = {
   transactions: Transaction[];
-  isLoading: boolean;
+    isLoading: boolean;
   currentPage: number;
   itemsPerPage: number;
   setPage: (page: number) => void;
   handleSearch: (query: string) => void;
   query: string;
   deleteTransaction: (id: number) => void;
-};
+  addTransaction: (transaction: Transaction) => void;
+}
 
 export interface Action {
   type: string;
