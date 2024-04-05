@@ -4,10 +4,11 @@ import { useGlobalContext } from '../context';
 import { Pagination, PaginationContent, PaginationItem } from '../components/ui/pagination';
 import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 export const TableComponent = () => {
   const { transactions, isLoading, currentPage, itemsPerPage, setPage, query, deleteTransaction } = useGlobalContext();
+  const [deletedIds, setDeletedIds] = useState<number[]>([]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -18,7 +19,11 @@ export const TableComponent = () => {
   };
 
   const handleDelete = (id: number) => {
-    deleteTransaction(id);
+    setDeletedIds([...deletedIds, id]);
+    setTimeout(() => {
+      deleteTransaction(id);
+      setDeletedIds([]);
+    }, 1000);
   };
 
   const transactionsFiltered = useMemo(() => {
@@ -49,7 +54,14 @@ export const TableComponent = () => {
           </TableHeader>
           <TableBody>
             {transactionsFiltered.map((transaction) => (
-              <TableRow key={transaction.id}>
+              <TableRow
+                key={transaction.id}
+                className={
+                  deletedIds.includes(transaction.id)
+                    ? 'opacity-0 transition-opacity duration-500 ease-in-out'
+                    : 'opacity-100'
+                }
+              >
                 <TableCell className="font-medium">{transaction.beneficiary}</TableCell>
                 <TableCell>{new Date(transaction.date).toLocaleString()}</TableCell>
                 <TableCell>{transaction.amount}</TableCell>
