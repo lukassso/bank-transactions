@@ -1,4 +1,4 @@
-import { Reducer } from 'react';
+import { type Reducer } from 'react';
 import { TransactionsState, type Action } from '../types';
 import {
   SET_LOADING,
