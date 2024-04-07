@@ -1,7 +1,15 @@
 import { FC, createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
 import reducer from './reducer';
-import { SET_LOADING, SET_TRANSACTIONS, SET_PAGE, SET_FILTERED_TRANSACTIONS, DELETE_TRANSACTION, ADD_TRANSACTION } from './actions';
+import {
+  SET_LOADING,
+  SET_TRANSACTIONS,
+  SET_PAGE,
+  SET_FILTERED_TRANSACTIONS,
+  DELETE_TRANSACTION,
+  ADD_TRANSACTION,
+} from './actions';
 import { TransactionsState, Transaction, AppContextValue } from '../types';
+import localTransactionsData from '../mock/db.json';
 
 const API_ENDPOINT = 'http://localhost:3000/transactions?';
 
@@ -34,12 +42,21 @@ const AppProvider: FC<AppProviderProps> = ({ children }) => {
   const fetchApiData = async () => {
     dispatch({ type: SET_LOADING });
     try {
-      const response = await fetch(API_ENDPOINT);
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
+      let transactions = [];
+
+      if (process.env.NODE_ENV !== 'development') {
+        transactions = localTransactionsData.transactions || [];
+      } else {
+        const response = await fetch(API_ENDPOINT);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json();
+        transactions = data || [];
       }
-      const data = await response.json();
-      const transactions = data || [];
+
       dispatch({
         type: SET_TRANSACTIONS,
         payload: {
@@ -48,10 +65,8 @@ const AppProvider: FC<AppProviderProps> = ({ children }) => {
       });
     } catch (error) {
       console.log('Error fetching data:', error);
-    
     }
   };
-
 
   const setPage = (page: number): void => {
     dispatch({ type: SET_PAGE, payload: { page } });

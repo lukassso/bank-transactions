@@ -1,4 +1,4 @@
-import { Reducer } from 'react';
+import { type Reducer } from 'react';
 import { TransactionsState, type Action } from '../types';
 import {
   SET_LOADING,
@@ -6,7 +6,7 @@ import {
   SET_PAGE,
   SET_FILTERED_TRANSACTIONS,
   DELETE_TRANSACTION,
-  ADD_TRANSACTION, 
+  ADD_TRANSACTION,
 } from './actions';
 
 const reducer: Reducer<TransactionsState, Action> = (state, action) => {
