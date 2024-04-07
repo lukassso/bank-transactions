@@ -9,6 +9,7 @@ export const SearchComponent = () => {
     <>
       <Search className="text-muted-foreground absolute left-2.5 top-2.5 h-5 w-5" />
       <Input
+        inputName="search"
         type="search"
         placeholder="Search beneficiary"
         className="bg-background w-full rounded-lg pl-8"

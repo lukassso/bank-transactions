@@ -15,11 +15,11 @@ const schema = yup.object().shape({
     .required('Account number is required')
     .matches(/^\d+$/, 'Account number must contain only digits'),
   address: yup.string().required('Address is required'),
-  description: yup.string(),
+  description: yup.string().required(),
   date: yup.date().required('Date is required'),
 });
 
-type FormInputs = Omit<Transaction, 'id' | 'date'> & { date: string };
+type FormInputs = Omit<Transaction, 'id'>;
 
 export const NewTransactionComponent = () => {
   const { addTransaction } = useGlobalContext();
