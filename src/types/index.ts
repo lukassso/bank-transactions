@@ -4,7 +4,7 @@ export interface Transaction {
   beneficiary: string;
   account: string;
   address: string;
-  date: string;
+  date: Date;
   description: string;
 }
 

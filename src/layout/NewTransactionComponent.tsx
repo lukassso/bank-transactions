@@ -9,17 +9,24 @@ import { type Transaction } from '../types';
 
 const schema = yup.object().shape({
   beneficiary: yup.string().required('Beneficiary is required'),
-  amount: yup.number().positive('Amount must be positive').required('Amount is required'),
+  amount: yup
+    .number()
+    .positive('Amount must be positive')
+    .required('Amount is required')
+    .transform(({ originalValue }) => (originalValue === '' ? undefined : originalValue)),
   account: yup
     .string()
     .required('Account number is required')
     .matches(/^\d+$/, 'Account number must contain only digits'),
   address: yup.string().required('Address is required'),
-  description: yup.string(),
-  date: yup.date().required('Date is required'),
+  description: yup.string().required('Description is required'),
+  date: yup
+    .date()
+    .required('Date is required')
+    .transform(({ originalValue }) => (originalValue === '' ? undefined : originalValue)),
 });
 
-type FormInputs = Omit<Transaction, 'id' | 'date'> & { date: string };
+type FormInputs = Omit<Transaction, 'id'>;
 
 export const NewTransactionComponent = () => {
   const { addTransaction } = useGlobalContext();
