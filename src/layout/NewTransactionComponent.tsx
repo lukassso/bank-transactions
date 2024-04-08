@@ -6,6 +6,8 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { useGlobalContext } from '../context';
 import { type Transaction } from '../types';
+import { useState } from 'react';
+import { Notification } from '../components/Notification';
 
 const schema = yup.object().shape({
   beneficiary: yup.string().required('Beneficiary is required'),
@@ -13,7 +15,9 @@ const schema = yup.object().shape({
     .number()
     .positive('Amount must be positive')
     .required('Amount is required')
-    .transform(({ originalValue }) => (originalValue === '' ? undefined : originalValue)),
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : value;
+    }),
   account: yup
     .string()
     .required('Account number is required')
@@ -23,7 +27,9 @@ const schema = yup.object().shape({
   date: yup
     .date()
     .required('Date is required')
-    .transform(({ originalValue }) => (originalValue === '' ? undefined : originalValue)),
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : value;
+    }),
 });
 
 type FormInputs = Omit<Transaction, 'id'>;
@@ -34,13 +40,21 @@ export const NewTransactionComponent = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
   });
 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
     const newTransaction = { ...data, id: Math.floor(Math.random() * 100000) };
     addTransaction?.(newTransaction);
+    reset();
+    setFormSubmitted(true);
+    setTimeout(() => {
+      setFormSubmitted(false);
+    }, 4000);
   };
 
   return (
@@ -64,6 +78,9 @@ export const NewTransactionComponent = () => {
           {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
           <Button type="submit">Add Transaction</Button>
         </form>
+        {formSubmitted && (
+          <Notification message="Transaction submitted successfully!" />
+        )}
       </CardContent>
     </Card>
   );
