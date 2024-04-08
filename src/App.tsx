@@ -14,7 +14,9 @@ const App = () => (
         </div>
         <NewTransactionComponent />
       </div>
-      <TableComponent />
+      <div className="overflow-hidden">
+        <TableComponent />
+      </div>
     </main>
     <Footer />
   </>
